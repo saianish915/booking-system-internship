@@ -115,14 +115,18 @@ booking-ui/
 ## Running the Project
 
 ### Backend
+```bash
 cd booking-system
 npm install
 npm run start:dev
+```
 
 ### Frontend
+```bash
 cd booking-ui
 npm install
 npm run dev
+```
 
 ---
 
