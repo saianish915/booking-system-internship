@@ -130,6 +130,88 @@ npm run dev
 
 ---
 
+## How to Test
+
+Once both backend and frontend are running, you can test the system using either the UI or API calls.
+
+### Using the UI
+
+1. Open the frontend:
+```bash
+http://localhost:5173
+```
+
+2. Test the following:
+
+- View events for Organization 2
+
+- View available resources
+
+- Allocate resources to events
+
+- Validate business rules:
+
+  - Try allocating the same resource twice
+
+  - Try overlapping exclusive resources
+
+  - Try exceeding shareable max concurrency
+
+  - Try invalid consumable quantities
+
+3. Scroll to the Reports section:
+
+- Click Refresh All Reports
+
+- Click Refresh Materialized View
+
+Verify that results appear correctly.
+
+---
+
+## Using API (cURL)
+
+### (a)Double-booked users
+```bash
+curl http://localhost:3000/reports/double-booked-users
+```
+
+### (b) Resource violations
+```bash
+curl http://localhost:3000/reports/resource-violations/exclusive
+curl http://localhost:3000/reports/resource-violations/shareable
+curl http://localhost:3000/reports/resource-violations/consumables
+```
+
+### (c) Utilization
+```bash
+curl "http://localhost:3000/reports/resource-hours?ownerOrgId=2"
+curl "http://localhost:3000/reports/underutilized?hours=2"
+```
+
+### (d) Parent boundary violations
+```bash
+curl http://localhost:3000/reports/parent-boundary-violations
+```
+
+
+### (e) External attendees threshold
+```bash
+curl "http://localhost:3000/reports/external-threshold?threshold=2"
+```
+
+### Recursive CTE
+```bash
+curl http://localhost:3000/reports/event-tree
+```
+
+### Refresh materialized view
+```bash
+curl -X POST http://localhost:3000/reports/refresh-resource-hours
+```
+
+---
+
 ## Sample Data
 
 Seed scripts populate:
