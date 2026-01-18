@@ -1,98 +1,161 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+Multi-Tenant Event Booking System
+Overview
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project is a prototype multi-tenant event booking system built as part of an internship assignment for Texas Sparks Constructions.
+The system allows organizations to manage events, attendees, and shared resources while enforcing complex scheduling and allocation constraints.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+The application demonstrates:
 
-## Description
+Relational database modeling
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Constraint enforcement using SQL
 
-## Project setup
+Advanced reporting queries
 
-```bash
-$ npm install
-```
+Backend API design with NestJS
 
-## Compile and run the project
+A simple React frontend
 
-```bash
-# development
-$ npm run start
+Tech Stack
+Backend
 
-# watch mode
-$ npm run start:dev
+NestJS
 
-# production mode
-$ npm run start:prod
-```
+Prisma ORM
 
-## Run tests
+PostgreSQL
 
-```bash
-# unit tests
-$ npm run test
+Raw SQL for complex reports
 
-# e2e tests
-$ npm run test:e2e
+Frontend
 
-# test coverage
-$ npm run test:cov
-```
+React (Vite + TypeScript)
 
-## Deployment
+Features
+Multi-Tenant Architecture
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Users belong to one organization
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Events and resources belong to organizations
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+Supports global shared resources
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Event Management
 
-## Resources
+Create and list events
 
-Check out a few resources that may come in handy when working with NestJS:
+Parent–child event relationships
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Time boundary enforcement
 
-## Support
+Resource Management
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Exclusive resources (rooms)
 
-## Stay in touch
+Shareable resources (equipment)
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Consumable resources (tracked by quantity)
 
-## License
+Allocation constraints enforced
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Attendee Management
+
+Internal users can register
+
+External attendees supported
+
+Attendance check-in tracking
+
+Business Rules Enforced
+
+Users cannot attend overlapping events
+
+Exclusive resources cannot overlap
+
+Shareable resources enforce max concurrent usage
+
+Consumables track quantity usage
+
+Parent events must contain child sessions
+
+Multi-tenant access rules enforced
+
+Reporting Endpoints
+Report	Endpoint
+Double booked users	/reports/double-booked-users
+Exclusive resource conflicts	/reports/resource-violations/exclusive
+Shareable over-allocation	/reports/resource-violations/shareable
+Consumables exceeded	/reports/resource-violations/consumables
+Resource utilization	/reports/resource-hours?ownerOrgId=2
+Underutilized resources	/reports/underutilized?hours=2
+Parent boundary violations	/reports/parent-boundary-violations
+External attendee threshold	/reports/external-threshold?threshold=2
+Recursive event tree	/reports/event-tree
+Refresh materialized view	POST /reports/refresh-resource-hours
+Database Requirements Implemented
+
+Composite unique constraints
+
+Foreign keys with cascading rules
+
+Check constraints
+
+Recursive CTE (event tree)
+
+Materialized view for resource utilization
+
+Project Structure
+booking-system/
+├── src/
+│   ├── events/
+│   ├── resources/
+│   ├── allocations/
+│   ├── attendance/
+│   ├── registrations/
+│   └── reports/
+├── prisma/
+└── README.md
+
+booking-ui/
+└── React frontend
+
+Running the Project
+Backend
+cd booking-system
+npm install
+npm run start:dev
+
+Frontend
+cd booking-ui
+npm install
+npm run dev
+
+Sample Data
+
+Seed scripts populate:
+
+Organizations
+
+Users
+
+Events
+
+Resources
+
+Allocations
+
+Registrations
+
+Author
+
+Sai Anish Nuthalapati
+
+Notes
+
+This project was developed strictly according to assignment requirements:
+
+All reports use raw SQL
+
+Constraints are enforced at database and application levels
+
+Focused on correctness over UI styling
