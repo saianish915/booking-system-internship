@@ -1,0 +1,133 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ResourceType {
+  EXCLUSIVE
+  SHAREABLE
+  CONSUMABLE
+}
+
+model Organization {
+  id        BigInt     @id @default(autoincrement())
+  name      String     @unique
+  users     User[]
+  events    Event[]
+  resources Resource[] @relation("OrgResources")
+}
+
+model User {
+  id       BigInt       @id @default(autoincrement())
+  orgId    BigInt
+  email    String
+  fullName String
+  org      Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  registrations EventRegistration[]
+  attendance    Attendance[]
+
+  @@unique([orgId, email])
+}
+
+model Event {
+  id            BigInt   @id @default(autoincrement())
+  orgId         BigInt
+  title         String
+  startsAt      DateTime @db.Timestamptz(6)
+  endsAt        DateTime @db.Timestamptz(6)
+  capacity      Int
+  allowExternal Boolean  @default(false)
+
+  parentEventId BigInt?
+  parentEvent   Event?  @relation("EventParent", fields: [parentEventId], references: [id], onDelete: SetNull)
+  childSessions Event[] @relation("EventParent")
+
+  org Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  registrations     EventRegistration[]
+  externalAttendees ExternalAttendee[]
+  allocations       ResourceAllocation[]
+  attendance        Attendance[]
+
+  @@index([orgId])
+}
+
+model Resource {
+  id       BigInt       @id @default(autoincrement())
+  name     String
+  type     ResourceType
+  isGlobal Boolean      @default(false)
+
+  ownerOrgId BigInt?
+  ownerOrg   Organization? @relation("OrgResources", fields: [ownerOrgId], references: [id], onDelete: Cascade)
+
+  shareable     Boolean @default(false)
+  maxConcurrent Int?
+  totalQuantity Int?
+
+  allocations ResourceAllocation[]
+
+  @@index([ownerOrgId])
+}
+
+model ResourceAllocation {
+  id           BigInt @id @default(autoincrement())
+  eventId      BigInt
+  resourceId   BigInt
+  quantityUsed Int?
+
+  event    Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  resource Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, resourceId])
+}
+
+model EventRegistration {
+  id           BigInt   @id @default(autoincrement())
+  eventId      BigInt
+  userId       BigInt
+  registeredAt DateTime @default(now()) @db.Timestamptz(6)
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+}
+
+model ExternalAttendee {
+  id           BigInt   @id @default(autoincrement())
+  eventId      BigInt
+  email        String
+  name         String?
+  registeredAt DateTime @default(now()) @db.Timestamptz(6)
+
+  event       Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  attendances Attendance[]
+
+  @@unique([eventId, email])
+}
+
+model Attendance {
+  id                 BigInt   @id @default(autoincrement())
+  eventId            BigInt
+  userId             BigInt?
+  externalAttendeeId BigInt?
+  checkedInAt        DateTime @default(now()) @db.Timestamptz(6)
+
+  event            Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user             User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  externalAttendee ExternalAttendee? @relation(fields: [externalAttendeeId], references: [id], onDelete: SetNull)
+
+  @@unique([eventId, userId])
+  @@unique([eventId, externalAttendeeId])
+}
